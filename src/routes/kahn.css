@@ -1,0 +1,229 @@
+@layer legacy {
+  .periodic-table-body {
+    padding:unset;
+    display:block
+  }
+  .periodic-table-body .periodic-table-grid {
+    grid-gap:2px;
+    grid-template-columns:repeat(18);
+    display:grid
+  }
+  .periodic-table-body .periodic-table-grid.main-table {
+    grid-template-rows:repeat(8,min-content);
+    grid-template-areas:"g g g g g g g g g g g g g g g g g g""H.key key key key key key key key key key. . . . .He""Li Be key key key key key key key key key key B C N O F Ne""Na Mg key key key key key key key key key key Al Si P S Cl Ar""K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr""Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe""Cs Ba lx Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn""Fr Ra ax Rf Db Sg Bh Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og";
+    margin-bottom:15px
+  }
+  .periodic-table-body .periodic-table-grid.lanthanide-actinide-table {
+    grid-template-rows:repeat(2,min-content);
+    grid-template-areas:". .La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu"". .Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm Md No Lr"
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell {
+    text-align:center;
+    vertical-align:middle;
+    padding:2px;
+    line-height:1.2;
+    position:relative
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell .atomic-num {
+    font-size:12px
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell .symbol {
+    font-size:18px;
+    font-weight:700
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell .weight {
+    font-size:11px
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.marker {
+    background-color:#ddd
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.periodic-table-group-number {
+    padding:.4em 0
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.non-metal {
+    color:#422b4b;
+    background-color:#d0bbd8;
+    border-color:#422b4b
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.non-metal:focus,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.non-metal:hover,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.non-metal:active {
+    color:#d0bbd8;
+    background-color:#422b4b
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.other-metal {
+    color:#1a242d;
+    background-color:#9eb5c6;
+    border-color:#1a242d
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.other-metal:focus,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.other-metal:hover,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.other-metal:active {
+    color:#9eb5c6;
+    background-color:#1a242d
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.metalloid {
+    color:#6f441f;
+    background-color:#f4e4d7;
+    border-color:#6f441f
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.metalloid:focus,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.metalloid:hover,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.metalloid:active {
+    color:#f4e4d7;
+    background-color:#6f441f
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.transition-metal {
+    color:#124a57;
+    background-color:#9cdceb;
+    border-color:#124a57
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.transition-metal:focus,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.transition-metal:hover,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.transition-metal:active {
+    color:#9cdceb;
+    background-color:#124a57
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.unknown {
+    color:#333;
+    background-color:#ddd;
+    border-color:#333
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.unknown:focus,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.unknown:hover,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.unknown:active {
+    color:#ddd;
+    background-color:#333
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.cutoff:before,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.cutoff:after {
+    content:" ";
+    background-color:#000;
+    display:block;
+    position:absolute
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.cutoff:before {
+    width:2px;
+    top:-2px;
+    bottom:-2px;
+    left:-2px
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.cutoff:after {
+    height:2px;
+    bottom:-2px;
+    left:-2px;
+    right:-2px
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key {
+    align-items:center;
+    display:flex
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key>div {
+    flex-grow:1
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-legend {
+    justify-content:center;
+    display:flex
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-legend ul {
+    width:-webkit-fit-content;
+    width:-moz-fit-content;
+    width:fit-content
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-legend li {
+    align-items:center;
+    display:flex
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-legend .periodic-table-legend-item {
+    border:1px solid;
+    border-radius:6px;
+    width:24px;
+    height:24px;
+    margin:5px
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-legend .periodic-table-legend-item.non-metal {
+    background-color:#d0bbd8;
+    border-color:#422b4b
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-legend .periodic-table-legend-item.other-metal {
+    background-color:#9eb5c6;
+    border-color:#1a242d
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-legend .periodic-table-legend-item.metalloid {
+    background-color:#f4e4d7;
+    border-color:#6f441f
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-legend .periodic-table-legend-item.transition-metal {
+    background-color:#9cdceb;
+    border-color:#124a57
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-example {
+    justify-content:center;
+    display:flex
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-example>div {
+    grid-template-rows:repeat(4,min-content);
+    grid-template-columns:80px 1.2em 1fr;
+    grid-template-areas:"example-atomic-num right-arrow0 atomic-num-label""example-symbol right-arrow1 symbol-label""example-weight right-arrow2 weight-label""hover-hint hover-hint hover-hint";
+    display:grid
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-example>div .example-atomic-num {
+    grid-area:example-atomic-num;
+    padding-top:4px;
+    font-size:24px
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-example>div .example-symbol {
+    grid-area:example-symbol;
+    font-size:36px;
+    font-weight:700
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-example>div .example-weight {
+    grid-area:example-weight;
+    padding-bottom:4px;
+    font-size:22px
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-example>div .example-atomic-num,
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-example>div .example-symbol,
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-example>div .example-weight {
+    color:#422b4b;
+    background-color:#d0bbd8;
+    justify-content:center;
+    align-items:center;
+    line-height:1.2;
+    display:flex
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-example>div .atomic-num-label {
+    grid-area:atomic-num-label
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-example>div .symbol-label {
+    grid-area:symbol-label
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-example>div .weight-label {
+    grid-area:weight-label
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-example>div .atomic-num-label,
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-example>div .symbol-label,
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-example>div .weight-label {
+    align-items:center;
+    line-height:1;
+    display:flex
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-example>div .periodic-table-example-right-arrow {
+    justify-content:center;
+    align-items:center;
+    display:flex
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-key .periodic-table-example>div .hover-hint {
+    text-align:center;
+    grid-area:hover-hint;
+    margin-top:10px;
+    font-size:12px
+  }
+}
+.el-name {
+  font-size: 8px;
+  color: #666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
