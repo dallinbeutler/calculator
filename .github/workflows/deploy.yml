@@ -1,89 +1,64 @@
-name: Deploy to GitHub Pages
+name: Vite Github Pages Deploy
 
 on:
+  # Runs on pushes targeting the default branch
   push:
-    branches: ["master"]
+    branches: ["master", "main"]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  build_site:
+  # Build job
+  build:
     runs-on: ubuntu-latest
+    environment:
+      name: demo
+      url: ${{ steps.deploy_to_pages.outputs.github_pages_url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
-      # If you're using pnpm, add this step then change the commands and cache key below to use `pnpm`
-      # - name: Install pnpm
-      #   uses: pnpm/action-setup@v3
-      #   with:
-      #     version: 8
+        uses: actions/checkout@v3
+      - name: Vite Github Pages Deployer
+        uses: skywarth/vite-github-pages-deployer@master
+        id: deploy_to_pages
 
 
+# name: Deploy to GitHub Pages
 
-      - name: Setup Bun
-        # You may pin to the exact commit or the version.
-        # uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
-        uses: oven-sh/setup-bun@v2.2.0
-        # with:
-          # The version of Bun to install. (e.g. "latest", "canary", "1.0.0", "1.0.x", <sha>)
-          # bun-version: # optional
-          # # The version of Bun to install from file. (e.g. "package.json", ".bun-version", ".tool-versions")
-          # bun-version-file: # optional
-          # # Override the URL to download Bun from. This skips version resolution and verifying AVX2 support.
-          # bun-download-url: # optional
-          # # List of package registries with authentication support. Format:
-          # - Default registry: https://registry.npmjs.org/
-          # - Default with token: https://registry.npmjs.org/|token
-          # - Scoped registry: @scope:https://registry.example.com/
-          # - Scoped with token: @scope:https://registry.example.com/|token
-          # - Scoped with credentials: @scope:https://user:pass@registry.example.com/
-          
-          # registries: # optional
-          # # The URL of the package registry to use for installing Bun. Set the $BUN_AUTH_TOKEN environment variable to authenticate with the registry.
-          # registry-url: # optional
-          # # The scope for authenticating with the package registry.
-          # scope: # optional
-          # # Disable caching of bun executable.
-          # no-cache: # optional
-          # # Personal access token (PAT) used to fetch tags from oven-sh/bun repository. Recommended for resolving wildcard/range versions to avoid GitHub API rate limiting. When running this action on github.com, the default value is sufficient. When running on GHES, you can pass a personal access token for github.com if you are experiencing rate limiting.
-          # token: # optional, default is ${{ github.server_url == 'https://github.com' && github.token || '' }}
-                
+# on:
+#   push:
+#     branches: ["master"]
+
+# jobs:
+#   build_site:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
 
 
-      
-      # - name: Install Node.js
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: 20
-      #     cache: npm
+#   deploy:
+#     needs: build_site
+#     runs-on: ubuntu-latest
 
-      # - name: Install dependencies
-      #   run: npm i
+#     permissions:
+#       pages: write
+#       id-token: write
 
-      - name: build
-        env:
-          BASE_PATH: '/${{ github.event.repository.name }}'
-        run: |
-          bun run build
-        
-      - name: Upload Artifacts
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # this should match the `pages` option in your adapter-static options
-          path: 'build/'
+#     environment:
+#       name: github-pages
+#       url: ${{ steps.deployment.outputs.page_url }}
 
-  deploy:
-    needs: build_site
-    runs-on: ubuntu-latest
-
-    permissions:
-      pages: write
-      id-token: write
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@v5
+#     steps:
+#       - name: Deploy
+#         id: deployment
+#         uses: actions/deploy-pages@v5
