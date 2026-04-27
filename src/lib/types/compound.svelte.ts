@@ -17,7 +17,7 @@ export type AmountBreakdownEntry = {
 
 export class Compound {
   id = $state<string>(crypto.randomUUID());
-  name = $state("Compound");
+  name = $state("C 1");
   elements = new SvelteMap<AtomicNumber, CompoundComponent>();
   quantityInputValue = $state("");
   inputTotalMoles = $state<number | null>(null);

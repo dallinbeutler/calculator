@@ -219,6 +219,129 @@
     margin-top:10px;
     font-size:12px
   }
+
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.other-non-metals {
+    color:#1f3a5f;
+    background-color:#c7e0ff;
+    border-color:#1f3a5f
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.alkali-metals {
+    color:#6a1b1b;
+    background-color:#ffc9c9;
+    border-color:#6a1b1b
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.transition-metals {
+    color:#124a57;
+    background-color:#9cdceb;
+    border-color:#124a57
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.other-metals {
+    color:#4b2f6b;
+    background-color:#dec9ff;
+    border-color:#4b2f6b
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.alkaline-earth-metals {
+    color:#6d3a00;
+    background-color:#ffd9a8;
+    border-color:#6d3a00
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.halogens {
+    color:#3b4a0b;
+    background-color:#e9f7aa;
+    border-color:#3b4a0b
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.noble-gases {
+    color:#1b4d3e;
+    background-color:#bff6ea;
+    border-color:#1b4d3e
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.lanthanides {
+    color:#664307;
+    background-color:#ffe8a3;
+    border-color:#664307
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.actinides {
+    color:#5c3b0a;
+    background-color:#f6d29a;
+    border-color:#5c3b0a
+  }
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.unknown-chemical-properties {
+    color:#374151;
+    background-color:#d1d5db;
+    border-color:#374151
+  }
+
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.other-non-metals:focus,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.other-non-metals:hover,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.other-non-metals:active,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.alkali-metals:focus,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.alkali-metals:hover,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.alkali-metals:active,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.transition-metals:focus,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.transition-metals:hover,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.transition-metals:active,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.other-metals:focus,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.other-metals:hover,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.other-metals:active,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.alkaline-earth-metals:focus,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.alkaline-earth-metals:hover,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.alkaline-earth-metals:active,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.halogens:focus,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.halogens:hover,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.halogens:active,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.noble-gases:focus,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.noble-gases:hover,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.noble-gases:active,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.lanthanides:focus,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.lanthanides:hover,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.lanthanides:active,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.actinides:focus,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.actinides:hover,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.actinides:active,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.unknown-chemical-properties:focus,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.unknown-chemical-properties:hover,
+  .periodic-table-body .periodic-table-grid .periodic-table-cell.unknown-chemical-properties:active {
+    filter: brightness(0.9);
+  }
+
+  .periodic-table-key-content {
+    display:flex;
+    gap:12px;
+    width:100%;
+    height:100%;
+    align-items:center;
+    justify-content:space-between
+  }
+
+  .periodic-table-category-swatch {
+    width:12px;
+    height:12px;
+    border:1px solid currentColor;
+    border-radius:3px;
+    display:inline-block
+  }
+  .periodic-table-category-swatch.other-non-metals { color:#1f3a5f; background-color:#c7e0ff }
+  .periodic-table-category-swatch.alkali-metals { color:#6a1b1b; background-color:#ffc9c9 }
+  .periodic-table-category-swatch.transition-metals { color:#124a57; background-color:#9cdceb }
+  .periodic-table-category-swatch.other-metals { color:#4b2f6b; background-color:#dec9ff }
+  .periodic-table-category-swatch.alkaline-earth-metals { color:#6d3a00; background-color:#ffd9a8 }
+  .periodic-table-category-swatch.halogens { color:#3b4a0b; background-color:#e9f7aa }
+  .periodic-table-category-swatch.noble-gases { color:#1b4d3e; background-color:#bff6ea }
+  .periodic-table-category-swatch.lanthanides { color:#664307; background-color:#ffe8a3 }
+  .periodic-table-category-swatch.actinides { color:#5c3b0a; background-color:#f6d29a }
+  .periodic-table-category-swatch.unknown-chemical-properties { color:#374151; background-color:#d1d5db }
+
+  .periodic-table-legend-panel .periodic-table-category-legend {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:1px 6px
+  }
+  .periodic-table-legend-panel .periodic-table-category-legend-item {
+    font-size:9px
+  }
+  .periodic-table-legend-panel .periodic-table-category-swatch {
+    width:10px;
+    height:10px
+  }
 }
 .el-name {
   font-size: 8px;

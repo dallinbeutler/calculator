@@ -5,6 +5,18 @@ export type ElementCategory =
   | "transition-metal"
   | "unknown";
 
+export type ElementDisplayCategory =
+  | "other-non-metals"
+  | "alkali-metals"
+  | "transition-metals"
+  | "other-metals"
+  | "alkaline-earth-metals"
+  | "halogens"
+  | "noble-gases"
+  | "lanthanides"
+  | "actinides"
+  | "unknown-chemical-properties";
+
 export type ElementData = {
   atomicNumber: number;
   name: string;
@@ -162,6 +174,214 @@ export const getElementsByAtomicNumbers = (atomicNumbers: number[]): ElementData
 
 export const getElementBySymbol = (symbol: string): ElementData | undefined =>
   Array.from(elementByAtomicNumber.values()).find((element) => element.symbol === symbol);
+
+const alkaliMetalSymbols = new Set(["Li", "Na", "K", "Rb", "Cs", "Fr"]);
+const alkalineEarthMetalSymbols = new Set(["Be", "Mg", "Ca", "Sr", "Ba", "Ra"]);
+const halogenSymbols = new Set(["F", "Cl", "Br", "I", "At"]);
+const nobleGasSymbols = new Set(["He", "Ne", "Ar", "Kr", "Xe", "Rn"]);
+const unknownChemicalPropertySymbols = new Set(["Nh", "Fl", "Mc", "Lv", "Ts", "Og"]);
+
+export const getElementDisplayCategory = (element: ElementData): ElementDisplayCategory => {
+  const { symbol, atomicNumber } = element;
+
+  if (unknownChemicalPropertySymbols.has(symbol)) return "unknown-chemical-properties";
+  if (halogenSymbols.has(symbol)) return "halogens";
+  if (nobleGasSymbols.has(symbol)) return "noble-gases";
+  if (alkaliMetalSymbols.has(symbol)) return "alkali-metals";
+  if (alkalineEarthMetalSymbols.has(symbol)) return "alkaline-earth-metals";
+  if (atomicNumber >= 57 && atomicNumber <= 71) return "lanthanides";
+  if (atomicNumber >= 89 && atomicNumber <= 103) return "actinides";
+
+  if (element.category === "transition-metal") return "transition-metals";
+  if (element.category === "other-metal") return "other-metals";
+  if (element.category === "metalloid") return "other-non-metals";
+  if (element.category === "unknown") return "unknown-chemical-properties";
+  return "other-non-metals";
+};
+
+const electronOrbitalOrder = [
+  { label: "1s", capacity: 2 },
+  { label: "2s", capacity: 2 },
+  { label: "2p", capacity: 6 },
+  { label: "3s", capacity: 2 },
+  { label: "3p", capacity: 6 },
+  { label: "4s", capacity: 2 },
+  { label: "3d", capacity: 10 },
+  { label: "4p", capacity: 6 },
+  { label: "5s", capacity: 2 },
+  { label: "4d", capacity: 10 },
+  { label: "5p", capacity: 6 },
+  { label: "6s", capacity: 2 },
+  { label: "4f", capacity: 14 },
+  { label: "5d", capacity: 10 },
+  { label: "6p", capacity: 6 },
+  { label: "7s", capacity: 2 },
+  { label: "5f", capacity: 14 },
+  { label: "6d", capacity: 10 },
+  { label: "7p", capacity: 6 }
+] as const;
+
+const electronConfigurationOverrides: Record<number, Partial<Record<(typeof electronOrbitalOrder)[number]["label"], number>>> = {
+  24: { "4s": 1, "3d": 5 },
+  29: { "4s": 1, "3d": 10 },
+  41: { "5s": 1, "4d": 4 },
+  42: { "5s": 1, "4d": 5 },
+  44: { "5s": 1, "4d": 7 },
+  45: { "5s": 1, "4d": 8 },
+  46: { "5s": 0, "4d": 10 },
+  47: { "5s": 1, "4d": 10 },
+  57: { "4f": 0, "5d": 1 },
+  58: { "4f": 1, "5d": 1 },
+  64: { "4f": 7, "5d": 1 },
+  78: { "6s": 1, "5d": 9 },
+  79: { "6s": 1, "5d": 10 },
+  89: { "5f": 0, "6d": 1 },
+  90: { "5f": 0, "6d": 2 },
+  91: { "5f": 2, "6d": 1 },
+  92: { "5f": 3, "6d": 1 },
+  93: { "5f": 4, "6d": 1 },
+  96: { "5f": 7, "6d": 1 },
+  103: { "6d": 0, "7p": 1 }
+};
+
+const nobleGasCores = [
+  { atomicNumber: 2, symbol: "He" },
+  { atomicNumber: 10, symbol: "Ne" },
+  { atomicNumber: 18, symbol: "Ar" },
+  { atomicNumber: 36, symbol: "Kr" },
+  { atomicNumber: 54, symbol: "Xe" },
+  { atomicNumber: 86, symbol: "Rn" }
+] as const;
+
+const getElectronOccupancy = (atomicNumber: number): Map<string, number> => {
+  if (!Number.isInteger(atomicNumber) || atomicNumber <= 0) return new Map<string, number>();
+
+  const occupancy = new Map<string, number>();
+  let remaining = atomicNumber;
+
+  for (const orbital of electronOrbitalOrder) {
+    const electrons = Math.max(0, Math.min(orbital.capacity, remaining));
+    occupancy.set(orbital.label, electrons);
+    remaining -= electrons;
+    if (remaining <= 0) break;
+  }
+
+  const override = electronConfigurationOverrides[atomicNumber];
+  if (override) {
+    for (const [label, electrons] of Object.entries(override)) {
+      occupancy.set(label, electrons ?? 0);
+    }
+  }
+
+  return occupancy;
+};
+
+export const getElectronConfiguration = (atomicNumber: number): string => {
+  const occupancy = getElectronOccupancy(atomicNumber);
+  if (!(occupancy instanceof Map)) return "";
+
+  return electronOrbitalOrder
+    .map(({ label }) => {
+      const electrons = occupancy.get(label) ?? 0;
+      return electrons > 0 ? `${label}${electrons}` : null;
+    })
+    .filter((part): part is string => Boolean(part))
+    .join(" ");
+};
+
+export const getElectronConfigurationNobleGas = (atomicNumber: number): string => {
+  if (!Number.isInteger(atomicNumber) || atomicNumber <= 0) return "";
+  if (atomicNumber <= 2) return getElectronConfiguration(atomicNumber);
+
+  const core = [...nobleGasCores].reverse().find((entry) => entry.atomicNumber < atomicNumber);
+  if (!core) return getElectronConfiguration(atomicNumber);
+
+  const totalOccupancy = getElectronOccupancy(atomicNumber);
+  const coreOccupancy = getElectronOccupancy(core.atomicNumber);
+
+  const remainder = electronOrbitalOrder
+    .map(({ label }) => {
+      const electrons = (totalOccupancy.get(label) ?? 0) - (coreOccupancy.get(label) ?? 0);
+      return electrons > 0 ? `${label}${electrons}` : null;
+    })
+    .filter((part): part is string => Boolean(part))
+    .join(" ");
+
+  return remainder ? `[${core.symbol}] ${remainder}` : `[${core.symbol}]`;
+};
+
+export const getValenceElectronCount = (atomicNumber: number): number => {
+  if (!Number.isInteger(atomicNumber) || atomicNumber <= 0) return 0;
+
+  const occupancy = getElectronOccupancy(atomicNumber);
+  let highestShell = 0;
+  for (const [label, electrons] of occupancy.entries()) {
+    if (electrons <= 0) continue;
+    const shell = Number(label.match(/^([0-9]+)/)?.[1] ?? 0);
+    if (shell > highestShell) highestShell = shell;
+  }
+
+  if (highestShell <= 0) return 0;
+  let valence = 0;
+  for (const [label, electrons] of occupancy.entries()) {
+    if (electrons <= 0) continue;
+    const shell = Number(label.match(/^([0-9]+)/)?.[1] ?? 0);
+    if (shell === highestShell) valence += electrons;
+  }
+  return valence;
+};
+
+export const getValenceElectronConfiguration = (atomicNumber: number): string => {
+  if (!Number.isInteger(atomicNumber) || atomicNumber <= 0) return "";
+
+  const occupancy = getElectronOccupancy(atomicNumber);
+  let highestShell = 0;
+  for (const [label, electrons] of occupancy.entries()) {
+    if (electrons <= 0) continue;
+    const shell = Number(label.match(/^([0-9]+)/)?.[1] ?? 0);
+    if (shell > highestShell) highestShell = shell;
+  }
+  if (highestShell <= 0) return "";
+
+  return electronOrbitalOrder
+    .map(({ label }) => {
+      const shell = Number(label.match(/^([0-9]+)/)?.[1] ?? 0);
+      if (shell !== highestShell) return null;
+      const electrons = occupancy.get(label) ?? 0;
+      return electrons > 0 ? `${label}${electrons}` : null;
+    })
+    .filter((part): part is string => Boolean(part))
+    .join(" ");
+};
+
+const superscriptDigits: Record<string, string> = {
+  "0": "⁰",
+  "1": "¹",
+  "2": "²",
+  "3": "³",
+  "4": "⁴",
+  "5": "⁵",
+  "6": "⁶",
+  "7": "⁷",
+  "8": "⁸",
+  "9": "⁹"
+};
+
+const toSuperscript = (value: string): string =>
+  value
+    .split("")
+    .map((digit) => superscriptDigits[digit] ?? digit)
+    .join("");
+
+export const formatElectronConfigurationSuperscript = (configuration: string): string =>
+  configuration
+    .split(" ")
+    .map((token) => {
+      const match = token.match(/^([1-9][spdfg])([0-9]+)$/i);
+      if (!match) return token;
+      return `${match[1]}${toSuperscript(match[2])}`;
+    })
+    .join(" ");
 
 // export const getTagMolarMass = (symbol: string) => {
 //   const element = getElementBySymbol(symbol);

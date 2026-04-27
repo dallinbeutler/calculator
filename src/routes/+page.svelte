@@ -1,8 +1,11 @@
 <script lang="ts">
   import {
     elementByAtomicNumber,
+    formatElectronConfigurationSuperscript,
+    getElectronConfigurationNobleGas,
     getElementBySymbol,
     getElementsByAtomicNumbers,
+    getValenceElectronConfiguration,
     lanthanideActinideAtomicNumbers,
     mainTableAtomicNumbers
   } from "$lib/elements";
@@ -24,12 +27,27 @@
   let activeAtomicNumber = $state<number | null>(null);
   let showLanthanidesActinides = $state(true);
   const initialCompound = blankCompound();
-  initialCompound.name = 'Compound 1';
   let compounds = $state<Compound[]>([initialCompound]);
   let activeCompoundId = $state(initialCompound.id);
 
   const activeElement = $derived(
     activeAtomicNumber === null ? null : elementByAtomicNumber.get(activeAtomicNumber) ?? null
+  );
+  const activeGroundStateElectronConfigurationNobleGas = $derived(
+    activeElement ? getElectronConfigurationNobleGas(activeElement.atomicNumber) : null
+  );
+  const activeGroundStateElectronConfigurationNobleGasSuperscript = $derived(
+    activeGroundStateElectronConfigurationNobleGas
+      ? formatElectronConfigurationSuperscript(activeGroundStateElectronConfigurationNobleGas)
+      : null
+  );
+  const activeValenceElectronConfiguration = $derived(
+    activeElement ? getValenceElectronConfiguration(activeElement.atomicNumber) : null
+  );
+  const activeValenceElectronConfigurationSuperscript = $derived(
+    activeValenceElectronConfiguration
+      ? formatElectronConfigurationSuperscript(activeValenceElectronConfiguration)
+      : null
   );
   const activeCompound = $derived(
     compounds.find((compound) => compound.id === activeCompoundId) ?? null
@@ -44,6 +62,18 @@
   };
 
   const getElement = (symbol: string) => getElementBySymbol(symbol);
+  const periodicTableLegend = [
+    { key: 'other-non-metals', label: 'Other non-metals' },
+    { key: 'alkali-metals', label: 'Alkali metals' },
+    { key: 'transition-metals', label: 'Transition metals' },
+    { key: 'other-metals', label: 'Other metals' },
+    { key: 'alkaline-earth-metals', label: 'Alkaline earth metals' },
+    { key: 'halogens', label: 'Halogens' },
+    { key: 'noble-gases', label: 'Noble gases' },
+    { key: 'lanthanides', label: 'Lanthanides' },
+    { key: 'actinides', label: 'Actinides' },
+    { key: 'unknown-chemical-properties', label: 'Unknown chemical properties' }
+  ] as const;
 
   const addElementToTags = (symbol: string) => {
     if (!activeCompound) return;
@@ -131,15 +161,44 @@
         Ln/An
       </Button>
 
-      <div style="grid-area: key; grid-column: 3 / span 10; grid-row: 2/ span 3;" class="periodic-table-key p-1 col-span-2 h-full w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm">
-        
-        {#if activeElement}
-        {@render renderTag(activeElement.symbol, 'lg')}
-        {:else}
-        <em class="hover-hint">Hover or focus an element to preview details</em>
-        {/if}
+      <div style="grid-area: key; grid-column: 3 / span 10; grid-row: 2/ span 3;" 
+      class="periodic-table-key p-1 col-span-2 h-full w-full rounded-md border px-3 py-2 text-sm shadow-sm">
+        <div class="periodic-table-key-content ">
+            {#if activeElement}
+            <div class="flex gap-2">
+
+              {@render renderTag(activeElement.symbol, 'lg')}
+              <div class=" flex flex-col">
+                <h2 class="text-sm font-semibold">electron config:</h2>
+                <p class="mt-2 max-w-[18rem] text-xs leading-snug text-slate-700">
+                  <span class="font-semibold">Ground-state:</span>
+                  {activeGroundStateElectronConfigurationNobleGasSuperscript}
+                </p>
+                <p class="max-w-[18rem] text-xs leading-snug text-slate-700">
+                  <span class="font-semibold">Valence:</span>
+                  {activeValenceElectronConfigurationSuperscript}
+                </p>
+              </div>
+            </div>
+            {:else}
+              <em class="hover-hint">Hover or focus an element to preview details</em>
+            {/if}
+        </div>
       </div>
-      <h1 class="text-2xl font-semibold tracking-tight" style="grid-area: key; grid-column: 3 / span 10; text-align: center;">Periodic Table</h1>
+      <div
+        style="grid-column: 13 / span 5; grid-row: 2;"
+        class="periodic-table-legend-panel rounded-md border border-slate-300 bg-white px-2 py-1 shadow-sm"
+      >
+        <p class="mb-1 text-[10px] font-semibold text-slate-700">Legend</p>
+        <div class="periodic-table-category-legend">
+          {#each periodicTableLegend as item}
+            <div class="periodic-table-category-legend-item" title={item.label}>
+              <span class={"periodic-table-category-swatch " + item.key}></span>
+              <span>{item.label}</span>
+            </div>
+          {/each}
+        </div>
+      </div>
     </div>
 
     {#if showLanthanidesActinides}
@@ -156,3 +215,18 @@
   />
 
 </section>
+<style>
+    .periodic-table-category-legend {
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:2px 8px;
+    font-size:10px;
+    width:100%
+  }
+  .periodic-table-category-legend-item {
+    display:flex;
+    align-items:center;
+    gap:4px;
+    white-space:nowrap
+  }
+</style>
