@@ -72,7 +72,7 @@
     { key: 'noble-gases', label: 'Noble gases' },
     { key: 'lanthanides', label: 'Lanthanides' },
     { key: 'actinides', label: 'Actinides' },
-    { key: 'unknown-chemical-properties', label: 'Unknown chemical properties' }
+    { key: 'unknown-chemical-properties', label: 'Unknown ' }
   ] as const;
 
   const addElementToTags = (symbol: string) => {
@@ -218,7 +218,7 @@
 <style>
     .periodic-table-category-legend {
     display:grid;
-    grid-template-columns:repeat(3,minmax(0,1fr));
+    grid-template-columns:repeat(4,minmax(0,auto));
     gap:2px 8px;
     font-size:10px;
     width:100%
