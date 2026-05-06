@@ -5,6 +5,8 @@
     getElectronConfigurationNobleGas,
     getElementBySymbol,
     getElementsByAtomicNumbers,
+    getPaulingElectronegativity,
+    getValenceElectronCount,
     getValenceElectronConfiguration,
     lanthanideActinideAtomicNumbers,
     mainTableAtomicNumbers
@@ -48,6 +50,12 @@
     activeValenceElectronConfiguration
       ? formatElectronConfigurationSuperscript(activeValenceElectronConfiguration)
       : null
+  );
+  const activeValenceElectronCount = $derived(
+    activeElement ? getValenceElectronCount(activeElement.atomicNumber) : null
+  );
+  const activePaulingElectronegativity = $derived(
+    activeElement ? getPaulingElectronegativity(activeElement.atomicNumber) : null
   );
   const activeCompound = $derived(
     compounds.find((compound) => compound.id === activeCompoundId) ?? null
@@ -177,7 +185,13 @@
                 <p class="max-w-[18rem] text-xs leading-snug text-slate-700">
                   <span class="font-semibold">Valence:</span>
                   {activeValenceElectronConfigurationSuperscript}
+                  ({activeValenceElectronCount} total)
                 </p>
+                <p class="max-w-[18rem] text-xs leading-snug text-slate-700">
+                  <span class="font-semibold">Electronegativity (Pauling):</span>
+                  {activePaulingElectronegativity ?? 'N/A'}
+                </p>
+                
               </div>
             </div>
             {:else}
